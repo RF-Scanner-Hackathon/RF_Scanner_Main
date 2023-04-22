@@ -6,8 +6,8 @@ userArray = []
 def __init__(self):
     #if not os.path.exists("user.txt"):
     # Write the folder path to a file
-    if(not open("users.text","x")):
-        loadUserArray()
+    open("users.txt", "x")
+    loadUserArray()
 
 
 def create_folder(fname, lname, last4DigitsOfPhone):
