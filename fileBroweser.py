@@ -37,12 +37,12 @@ class Browser(ctk.CTkToplevel):
             if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
                 self.filename = filedialog.askopenfilename(initialdir="/",
                                                            title="Select a CSV File",
-                                                           filetypes=(("CSV files",
+                                                           filetypes=(("all files",
+                                                                       "*.*"),
+                                                                    ("CSV files",
                                                                        "*.csv*"),
-                                                                      ("iq files",
-                                                                       "*.iq*"),
-                                                                      ("all files",
-                                                                       "*.*")))
+                                                                    ("iq files",
+                                                                       "*.iq*")))
 
                 self.label_file_explorer.configure(text="File Opened: " + self.filename)
                 # time.sleep(2.5)

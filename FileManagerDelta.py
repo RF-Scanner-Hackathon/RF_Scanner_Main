@@ -5,7 +5,12 @@ userArray = []
 
 
 def __init__(self):
-    loadUserArray()
+    try:
+        open("users.txt", "x")
+    except:
+        loadUserArray()
+    #if (not open("users.txt", "x")):
+    #    loadUserArray()
 
 
 def create_folder(fname, lname, last4DigitsOfPhone):
@@ -145,7 +150,7 @@ def main():
     # print(userArray)
 
     # print(userArray[0])
-    save_file(log_in("Sam", "9999"), r"C:\Users\Samarpita Podder\Desktop\file.txt")
+    #save_file(log_in("Sam", "9999"), r"C:\Users\Samarpita Podder\Desktop\file.txt")
 
 
 #main()

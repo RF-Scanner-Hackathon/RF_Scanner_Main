@@ -76,55 +76,60 @@ def printTests():
 
     print('to float32', np.float32(decoded))
 
-
 def iqToCSV(filePath):
-    print('Start iqToCSV filePath: ', filePath)
-    dot = filePath.rfind('.')  # Assumption there will be no extra dots
-    print("dot index:", dot)
+
+    dot = filePath.rfind('.')
     dash = filePath.rfind('/')
-    print("dash index:", dash)
 
-    if (dash == -1):
-        iqFile = filePath[0:dot]
+    initialFile = filePath[dash + 1::]                      #test3.iq
+    extention = filePath[dot::]                             #.iq
+
+    if (extention == '.csv'):
+        return filePath
     else:
-        iqFile = filePath[dash + 1:dot]
+        if (dash == -1):
+            nameFile = filePath[0:dot]                        #test3.iq or test3.cfile
+        else:
+            nameFile = filePath[dash + 1:dot]
 
-    print('iqFile:' + iqFile)
-    csvFile = iqFile + '.csv'
-    print('csvFile:' + csvFile)
-    initialFile = filePath[dash + 1::]
-    print('initialFile:', initialFile)
-    parentFolder = filePath[0:dash]
-    print('parentFolder', parentFolder)
-    absolutePath = parentFolder + '/' + csvFile
-    print('absolute', absolutePath)
+        csvFile = nameFile + '.csv'                           #test3.csv
 
-    iqArray = readIQ(filePath)
-    # iqArray = np.nan_to_num(iqArray, nan=0)
+        if (dash == -1):
+            absolutePath = csvFile
+        else:
+            parentFolder = filePath[0:dash]  # pwd
+            absolutePath = parentFolder + '/' + csvFile  # Whole Path of file
 
-    spectrogram = fftAlgorithm(iqArray)
+        try:
+            open(csvFile,'r')
+            return absolutePath
+        except:
+            iqArray = readIQ(filePath)
+            if(extention == '.iq'):
+                iqArray = np.nan_to_num(iqArray, nan=0.01)
+                #Ask the user to process a new csv file??
 
-    writeArray(spectrogram, absolutePath)
+            spectrogram = fftAlgorithm(iqArray)
 
-    # displayPSD(spectrogram)
+            writeArray(spectrogram, absolutePath)
 
-    return absolutePath
+            #displayPSD(spectrogram)
+
+            return absolutePath
 
 
-'''
+
+
+
 def displayPSD(fileName):
-    
     spectrogram = readArrayAsMatrix(fileName)
-    
-    
+
     print(spectrogram)
-    
+
     plot.imshow(spectrogram, aspect='auto')
     plot.xlabel("Frequency [MHz]")
     plot.ylabel("Time [s]")
     plot.show()
-    
-                '''
 
 
 # Ready to hit run and reads txt file from same folder
@@ -149,3 +154,5 @@ def main():
     print('\nMain Finished')
 
 # main()
+
+
