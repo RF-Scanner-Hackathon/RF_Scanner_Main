@@ -109,7 +109,7 @@ def save_file(user, file_path):
 # The following method will search for the user.
 def log_in(fname, lastFourDigitOfPhoneNo):
     for element in userArray:
-        if element.fname.strip().__eq__(fname.strip()) and element.pnumber.strip().__eq__(lastFourDigitOfPhoneNo.strip()):
+        if element.fname.strip().lower().__eq__(fname.strip().lower()) and element.pnumber.strip().__eq__(lastFourDigitOfPhoneNo.strip()):
             # if element.logInComp(fname, lastFourDigitOfPhoneNo):
             print("user found")
             return element
