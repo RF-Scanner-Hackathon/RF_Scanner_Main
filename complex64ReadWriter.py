@@ -12,7 +12,9 @@ import struct
 
 # Converts .iq File to ndarray
 def readIQ(fileName):
-    return np.fromfile(fileName, np.complex64)
+    #return np.fromfile(fileName, np.complex64)
+    return np.fromfile(fileName, dtype=np.uint)
+
 
 
 # Writes ndarray to file
@@ -105,8 +107,8 @@ def iqToCSV(filePath):
             return absolutePath
         except:
             iqArray = readIQ(filePath)
-            if(extention == '.iq'):
-                iqArray = np.nan_to_num(iqArray, nan=0.01)
+            #if(extention == '.iq'):
+                #iqArray = np.nan_to_num(iqArray, nan=0.01)
                 #Ask the user to process a new csv file??
 
             spectrogram = fftAlgorithm(iqArray)
