@@ -1,0 +1,6 @@
+*.iq
+*.csv
+.idea
+*.cfile
+_pycache_
+users.txt
