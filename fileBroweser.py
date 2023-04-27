@@ -26,6 +26,7 @@ class Browser(ctk.CTkToplevel):
                 print("sams fileMan: ", sam)
                 self.absolutePath = complex.iqToCSV(sam)
                 self.open_analytics(self.absolutePath)
+                #self.open_analytics(self.filename)
                 self.destroy()
 
         self.geometry("700x400")
@@ -35,14 +36,14 @@ class Browser(ctk.CTkToplevel):
         # file explorer window
         def browseFiles():
             if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
-                self.filename = filedialog.askopenfilename(initialdir="/",
+                self.filename = filedialog.askopenfilename(initialdir=currentuser.getPath(),
                                                            title="Select a CSV File",
-                                                           filetypes=(("all files",
-                                                                       "*.*"),
-                                                                    ("CSV files",
+                                                           filetypes=(("CSV files",
                                                                        "*.csv*"),
-                                                                    ("iq files",
-                                                                       "*.iq*")))
+                                                                      ("iq files",
+                                                                       "*.iq*"),
+                                                                      ("all files",
+                                                                       "*.*")))
 
                 self.label_file_explorer.configure(text="File Opened: " + self.filename)
                 # time.sleep(2.5)
@@ -63,7 +64,7 @@ class Browser(ctk.CTkToplevel):
 
         self.button_explore = ctk.CTkButton(self.file,
                                             text="Browse Files",
-                                            command=browseFiles)
+                                            command=browseFiles())
         self.button_explore.pack(padx=20, pady=20)
 
         self.button_exit = ctk.CTkButton(self.file,

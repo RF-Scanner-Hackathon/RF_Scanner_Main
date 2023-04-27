@@ -5,7 +5,7 @@ import fileBroweser as browser
 import complex64ReadWriter as complex
 import time
 
-currentuser = fileMan.user("Andrew", "Carvajal", "7641", "")
+#currentuser = fileMan.user("Andrew", "Carvajal", "7641", "")
 
 
 class loginWindow(ctk.CTkToplevel):
@@ -23,7 +23,9 @@ class loginWindow(ctk.CTkToplevel):
                 print("login")
                 fileMan.printUserArray()
                 # if fileMan.log_in(self.log_firstname.get().strip(), self.log_phone.get().strip()):
+                currentuser = None
                 currentuser = fileMan.log_in(self.log_firstname.get().strip(), self.log_phone.get().strip())
+                print("currentuser:", currentuser.fname)
                 if currentuser != None:
                     self.open_fileBrowser(currentuser)
 

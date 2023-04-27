@@ -1,10 +1,11 @@
 import os
 import shutil
-#text
+
 userArray = []
 
+
 def __init__(self):
-    #if not os.path.exists("user.txt"):
+    # if not os.path.exists("user.txt"):
     # Write the folder path to a file
     open("users.txt", "x")
     loadUserArray()
@@ -31,6 +32,7 @@ def create_folder(fname, lname, last4DigitsOfPhone):
         f.write(f"{folder_path}\n")
 
     return folder_path
+
 
 class user:
     def __init__(self, fname, lname, pnumber, fpath):
@@ -74,8 +76,8 @@ def loadUser(infoTextFilePath):
     tempUser = user(tempFile.readline(), tempFile.readline(), tempFile.readline(), tempFile.readline())
     return tempUser
 
+
 def getInfoText(folderPath):
-    
     folderPath = folderPath.rstrip('\n')
     print(folderPath)
     fileName = "info.txt"
@@ -88,18 +90,19 @@ def getInfoText(folderPath):
 
 
 def save_file(user, file_path):
-
     new_file_path = shutil.move(file_path, user.fpath)
 
     return new_file_path
 
-#def  load_file(user, )
+
+# def  load_file(user, )
 
 # The following method will search for the user.
 def log_in(fname, lastFourDigitOfPhoneNo):
     for element in userArray:
-        if element.fname.strip().__eq__(fname.strip()) and element.pnumber.strip().__eq__(lastFourDigitOfPhoneNo.strip()):
-        #if element.logInComp(fname, lastFourDigitOfPhoneNo):
+        if element.fname.strip().__eq__(fname.strip()) and element.pnumber.strip().__eq__(
+                lastFourDigitOfPhoneNo.strip()):
+            # if element.logInComp(fname, lastFourDigitOfPhoneNo):
             print("user found")
             return element
         print(fname)
@@ -109,37 +112,35 @@ def log_in(fname, lastFourDigitOfPhoneNo):
     print("user not found")
     return
 
+
 def loadUserArray():
     returnArray = []
     with open("users.txt", "r") as f:
         for line in f:
             returnArray.append(line)
     for element in returnArray:
-        #print(element)
+        # print(element)
         userArray.append(loadUser(getInfoText(element)))
 
-        #print(element)
-        #print(getInfoText(str(element)))
+        # print(element)
+        # print(getInfoText(str(element)))
 
     return returnArray
 
+
 def main():
-    #f_name = input("Enter the first name : ")
-    #l_name = input("Enter the last name : ")
-    #phone = str(input("Enter the last 4 digits of phone number : "))
-    #tempVar = loadUser(getInfoText(create_folder(f_name,l_name, phone)))
+    # f_name = input("Enter the first name : ")
+    # l_name = input("Enter the last name : ")
+    # phone = str(input("Enter the last 4 digits of phone number : "))
+    # tempVar = loadUser(getInfoText(create_folder(f_name,l_name, phone)))
 
-
-    #print(tempVar)
-    #print(tempVar.getPath())
+    # print(tempVar)
+    # print(tempVar.getPath())
     print(loadUserArray())
-    #print(userArray)
+    # print(userArray)
 
-    #print(userArray[0])
+    # print(userArray[0])
     save_file(log_in("Sam", "9999"), r"C:\Users\Samarpita Podder\Desktop\file.txt")
-
-
-
 
 
 main()
