@@ -24,9 +24,9 @@ class Browser(ctk.CTkToplevel):
 
                 sam = fileMan.save_file(currentuser, self.filename)
                 print("sams fileMan: ", sam)
-                #self.absolutePath = complex.iqToCSV(sam)
-                #self.open_analytics(self.absolutePath)
-                self.open_analytics(self.filename)
+                self.absolutePath = complex.iqToCSV(sam)
+                self.open_analytics(self.absolutePath)
+                #self.open_analytics(self.filename)
                 self.destroy()
 
         self.geometry("700x400")
@@ -36,7 +36,7 @@ class Browser(ctk.CTkToplevel):
         # file explorer window
         def browseFiles():
             if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
-                self.filename = filedialog.askopenfilename(initialdir=currentuser.getPath,
+                self.filename = filedialog.askopenfilename(initialdir=currentuser.getPath(),
                                                            title="Select a CSV File",
                                                            filetypes=(("CSV files",
                                                                        "*.csv*"),

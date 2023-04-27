@@ -202,7 +202,7 @@ class analytics(ctk.CTkToplevel):
         print("default button")
 
         # spectrogram = complex.readArrayAsMatrix(csvPath)
-        spectrogram = complex.genFromTextPassthrough(csvPath)
+        '''spectrogram = complex.genFromTextPassthrough(csvPath)
 
         print(spectrogram)
 
@@ -210,6 +210,7 @@ class analytics(ctk.CTkToplevel):
         plot.xlabel("Frequency [MHz]")
         plot.ylabel("Time [s]")
         plot.show()
+        '''
         '''
 
         fileName = 'meetingCFILE.csv'
@@ -219,7 +220,7 @@ class analytics(ctk.CTkToplevel):
         plot.xlabel("Frequency [MHz]")
         plot.ylabel("Time [s]")
         plot.show()'''
-        # andrew.displayPSD(csvPath)
+        complex.displayPSD(csvPath)
         '''
         fig, ax = plt.imshow()
         fig.set_size_inches(11, 5.3)
