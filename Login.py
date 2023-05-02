@@ -11,7 +11,7 @@ import time
 class loginWindow(ctk.CTkToplevel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
+        self.focus()
         self.toplevel_window = None
 
         def button_click(args):
@@ -92,5 +92,6 @@ class loginWindow(ctk.CTkToplevel):
     def open_fileBrowser(self, user):
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
             self.toplevel_window = browser.Browser(user)  # create window if its None or destroyed
+            self.toplevel_window.focus()
         else:
             self.toplevel_window.focus()  # if window exists focus it
