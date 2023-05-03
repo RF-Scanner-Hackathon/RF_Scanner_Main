@@ -382,7 +382,7 @@ def mainTest():
     print(getSecondsFromRows(getTranLengthBroadcast()))
     #print(checkRowOffsetTest())
 
-#start(file, rowsToCheck, transLengthThreshhold)
+start(file, rowsToCheck, transLengthThreshhold)
 #mainTest()
 #print(len(aboveAverageRowNumber))
 #print("out of")
