@@ -9,9 +9,9 @@ import math
 
 
 
-file = sys.argv[1] + ".csv" #CSV File
-rowsToCheck = int(sys.argv[2]) #Amount of Rows that will be computed for the average
-transLengthThreshhold = int(sys.argv[3]) #in the return of function createEdges(), Will show edges higher or equal to this number (EX"  if number is "5", (2-4 Distance (2) NOT SHOWN (4-10 DIstance 6)) SHOWN)
+#file = sys.argv[1] + ".csv" #CSV File
+#rowsToCheck = int(sys.argv[2]) #Amount of Rows that will be computed for the average
+#transLengthThreshhold = int(sys.argv[3]) #in the return of function createEdges(), Will show edges higher or equal to this number (EX"  if number is "5", (2-4 Distance (2) NOT SHOWN (4-10 DIstance 6)) SHOWN)
 #file = "" #CSV File
 #rowsToCheck = 0#Amount of Rows that will be computed for the average
 #transLengthThreshhold = 0 #in the return of function createEdges(), Will show edges higher or equal to this number (EX"  if number is "5", (2-4 Distance (2) NOT SHOWN (4-10 DIstance 6)) SHOWN)
