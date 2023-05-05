@@ -22,6 +22,7 @@ aboveAverageRowNumber = 0
 tranLengthAverage = 0
 tranLengthGreatestDist = 0
 traceTimeCalcVar = 62.4
+globalEdgeList = []
 
 ##Function that will return the number of the row it belives to be above average
 ##Average range will take in how many rows to calulate for the average
@@ -279,6 +280,9 @@ def getTranLengthBroadcast():
 def getTranmissionNoiseDifference():
     return numpy.round(getMaxTranmission()/getNoiseFloor(),4)
 
+def getGlobalEdgeList():
+    return globalEdgeList
+
 def getSecondsFromRows(rowDistance):
     return numpy.round(rowDistance / traceTimeCalcVar,4)
 
@@ -345,6 +349,7 @@ def start(fileName, rows, lengthThreshhold):
     global file
     global rowsToCheck
     global transLengthThreshhold
+    global globalEdgeList
     file = fileName
     rowsToCheck = rows
     transLengthThreshhold = lengthThreshhold
@@ -355,9 +360,9 @@ def start(fileName, rows, lengthThreshhold):
 ##AboverAverageRowNumber is list
     aboveAverageRowNumber = findAboveAverage(rowsToCheck)
     edgeList = []
-    edgeList = createEdges(aboveAverageRowNumber,transLengthThreshhold)
+    globalEdgeList = createEdges(aboveAverageRowNumber,transLengthThreshhold)
     #print(edgeList)
-    printEdges(edgeList)
+    printEdges(globalEdgeList)
     mainTest()
 
 

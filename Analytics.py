@@ -1,20 +1,79 @@
+import importlib.util
+import os
+
 import customtkinter as ctk
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plot
-import CSVAlgoFoxtrot as goDelta
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
 import complex64ReadWriter as complex
-import Login as login
+import loadNewAnalytics
 
+CSVAlgoCopyPath = os.path.abspath('CSVAlgoDelta.py')
+CSVAlgoDefaultName = "CSVAlgoDelta"
 
-# csvpath = "test3.csv"
+csvPathTest = "test3.csv"
+canvas = FigureCanvasTkAgg
+userDirectory = " "
+userAlgoPath = " "
+sliderLastNumber = 0
+class ScrollingFrameSean(ctk.CTkScrollableFrame):
+    listSize = 0
+    def __init__(self, master, **kwargs):
+        super().__init__(master, **kwargs)
+
+        # add widgets onto the frame...
+    def addText(self,text):
+        self.label = ctk.CTkLabel(master=self, text=(text))
+        self.label.grid(row=self.listSize, column=0, padx=20)
+        self.listSize = self.listSize + 1
+    def addTextArray(self,array):
+        for index in array:
+            self.addText(index)
+        self.addText(" ")
+        self.addText(" ")
+
+def algoImport(algoPath):
+    importName = os.path.basename(algoPath)
+    #specImport = importlib.util.sp
+    try:
+        #fp,path,desc = imp.find_module(importName,algoPath)
+        specImport = importlib.util.spec_from_file_location(importName,algoPath)
+        print("Loaded Algorithm " + algoPath)
+        return specImport.loader.load_module()
+    except:
+        print("Module not found: " + algoPath + " " + importName)
+        #fp, path, desc = imp.find_module(CSVAlgoDefaultName)
+       #return imp.load_module(CSVAlgoDefaultName,fp,path,desc)
+        specImport = importlib.util.spec_from_file_location(CSVAlgoDefaultName,CSVAlgoCopyPath)
+        print(CSVAlgoCopyPath)
+        return specImport.loader.load_module()
+    return none
+    #return imp.load_module(importName,fp,path,desc)
 
 
 class analytics(ctk.CTkToplevel):
-    def __init__(self, csvPath, *args, **kwargs):
+    def __init__(self, csvPath,algoBoolean,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.__dict__.update(kwargs)
+        self.toplevel_window = None
+        global csvPathTest
+        csvPathTest = csvPath
+        #algoPath = pathlib.Path(csvPath).parent.resolve().__str__()
+        algoPath = os.path.dirname(csvPath)
+        global userDirectory
+        userDirectory = algoPath
+        importName = os.path.basename(algoPath)
+        algoPath += "/"
+        algoPath += importName
+        algoPath += "Algo.py"
+        global userAlgoPath
+        userAlgoPath = algoPath
+        if(algoBoolean == "y"):
+
+            #print(algoPath)
+            goDelta = algoImport(algoPath)
+        else:
+            goDelta = algoImport(CSVAlgoCopyPath)
 
         def button_click(args):
             # if args == 1:
@@ -45,10 +104,12 @@ class analytics(ctk.CTkToplevel):
         self.left_frame = ctk.CTkFrame(master=self,
                                        width=140,
                                        corner_radius=0)
+
         self.left_frame.grid(row=0,
                              column=4,
                              padx=100,
-                             pady=100, sticky="nsew")
+                             pady=0, sticky="nsew")
+
 
         self.mid_frame = ctk.CTkFrame(master=self,
                                       width=600,
@@ -57,7 +118,7 @@ class analytics(ctk.CTkToplevel):
                             column=1,
                             padx=2,
                             pady=2,
-                            rowspan=2,
+                            rowspan=3,
                             columnspan=3, sticky="nsew")
 
         # self.right_frame = customtkinter.CTkFrame(self)
@@ -69,7 +130,7 @@ class analytics(ctk.CTkToplevel):
         self.left_label.grid(row=2,
                              column=0,
                              padx=(20, 10),
-                             pady=(10, 10),
+                             pady=(5, 2),
                              sticky="nsew")
 
         #    self.right_label = customtkinter.CTkLabel(self.right_frame, text="right label:", anchor="w")
@@ -78,42 +139,67 @@ class analytics(ctk.CTkToplevel):
         self.slider = ctk.CTkSlider(master=self.left_frame,
                                     width=300,
                                     height=20,
-                                    from_=1,
-                                    to=1000,
-                                    number_of_steps=999,
+                                    from_=0,
+                                    to=4,
+                                    number_of_steps=4,
                                     command=self.update_surface)
         self.slider.grid(row=3,
                          column=0,
                          padx=(20, 10),
-                         pady=(10, 10), sticky="nsew")
+                         pady=(10, 5), sticky="nsew")
         goDelta.start(csvPath, 100, 50)
 
         self.left_label2 = ctk.CTkLabel(master=self.left_frame, text=("Max transmission:", goDelta.getMaxTranmission()))
         self.left_label2.grid(row=4,
                               column=0,
                               padx=(20, 10),
-                              pady=(10, 10),
+                              pady=(5, 5),
                               sticky="nsew")
 
         self.left_label3 = ctk.CTkLabel(master=self.left_frame, text=("Trace time:", goDelta.getTraceTime()))
         self.left_label3.grid(row=5,
                               column=0,
                               padx=(20, 10),
-                              pady=(10, 10),
+                              pady=(5, 5),
                               sticky="nsew")
         self.left_label4 = ctk.CTkLabel(master=self.left_frame, text=("noise floor", goDelta.getNoiseFloor()))
         self.left_label4.grid(row=6,
                               column=0,
                               padx=(20, 10),
-                              pady=(10, 10),
+                              pady=(5, 5),
                               sticky="nsew")
         self.left_label5 = ctk.CTkLabel(master=self.left_frame,
-                                        text=("trans length average:", goDelta.getTranLengthAverage()))
+                                        text=("trans length average (Seconds)", goDelta.getSecondsFromRows(goDelta.getTranLengthAverage())))
         self.left_label5.grid(row=7,
                               column=0,
                               padx=(20, 10),
                               pady=(10, 10),
                               sticky="nsew")
+        self.left_label6 = ctk.CTkLabel(master=self.left_frame,
+                                       text=("BroadCast Length / Longest Recorded Burst (Seconds):", goDelta.getSecondsFromRows(goDelta.getTranLengthBroadcast())))
+        self.left_label6.grid(row=8,
+                              column=0,
+                              padx=(20, 10),
+                              pady=(10, 10),
+                              sticky="nsew")
+
+        self.left_label7 = ctk.CTkLabel(master=self.left_frame,text=("Tranmission/Noise Difference %:", goDelta.getTranmissionNoiseDifference()))
+        self.left_label7.grid(row=9,
+                              column=0,
+                              padx=(20, 10),
+                              pady=(10, 10),
+                              sticky="nsew")
+
+        self.left_scrollBox = ScrollingFrameSean(master=self.left_frame, orientation="vertical", width=100,height=10,corner_radius=0,label_text='EdgeList')
+        self.left_scrollBox.addTextArray(goDelta.getGlobalEdgeList())
+        self.left_scrollBox.grid(row=10,
+                              column=0,
+                              padx=(20,10),
+                              pady=(10,10),
+                              rowspan = 1,
+                              sticky="new")
+        #self.left_scrollBox.grid_propagate(0)
+
 
         self.logo_label = ctk.CTkLabel(self.sidebar_frame,
                                        text="Analytics",
@@ -147,7 +233,7 @@ class analytics(ctk.CTkToplevel):
                                             fg_color="transparent",
                                             text="Default",
                                             border_width=3,
-                                            command=lambda: self.defaultTrace(csvPath),
+                                            command=lambda: self.changeAlgo(CSVAlgoCopyPath),
                                             text_color=("gray10", "#DCE4EE"))
         self.default_button.grid(row=0,
                                  column=0,
@@ -158,7 +244,7 @@ class analytics(ctk.CTkToplevel):
                                          fg_color="transparent",
                                          text="Edit",
                                          border_width=3,
-                                         command=self.editTrace,
+                                         command=self.openUserAlgoEdit,
                                          text_color=("gray10", "#DCE4EE"))
         self.edit_button.grid(row=1,
                               column=0,
@@ -177,7 +263,7 @@ class analytics(ctk.CTkToplevel):
 
         self.load_button = ctk.CTkButton(master=self.sidebar_frame,
                                          text="Load",
-                                         command=self.loadTrace,
+                                         command= lambda: self.changeAlgo(userAlgoPath),
                                          text_color=("gray10", "#DCE4EE"))
         self.load_button.grid(row=3,
                               column=0,
@@ -194,6 +280,7 @@ class analytics(ctk.CTkToplevel):
                               column=4,
                               padx=(5, 5),
                               pady=(20, 20))
+        self.defaultTrace(csvPath)
 
     def change_appearance_mode_event(self, new_appearance_mode: str):
         ctk.set_appearance_mode(new_appearance_mode)
@@ -204,15 +291,54 @@ class analytics(ctk.CTkToplevel):
 
     def defaultTrace(self,csvPath):
         print("default button")
-
+        global canvas
         spectrogram = complex.readArrayAsMatrix(csvPath)
 
-        print(spectrogram)
+        #print(spectrogram)
 
-        plot.imshow(spectrogram, aspect='auto')
-        plot.xlabel("Frequency [MHz]")
-        plot.ylabel("Time [s]")
-        plot.show()
+        #plot.imshow(spectrogram, aspect='auto')
+        #plot.xlabel("Frequency [MHz]")
+        #plot.ylabel("Time [s]")
+        fig, ax = plot.subplots(figsize=(4,4))
+        ax.set(xlabel='Frequency [MHz]',ylabel='Time [s]')
+
+
+        ax.imshow(spectrogram, aspect='auto')
+        fig.subplots_adjust()
+        canvas = FigureCanvasTkAgg(fig,master=self.mid_frame)
+        canvas.draw()
+        canvas.get_tk_widget().place(relx=0.15,rely=0.15)
+        #plot.show()
+
+    def plotZoom(self,number):
+        #Does not work and crashes the program if the zoom slider is moved to rapidly, need to find a better way to do this
+        '''
+        global canvas
+        if(number >= 1):
+            canvas.ax
+            canvas.set_figheight(canvas.figure.get_figheight() * 1.5)
+            canvas.figure.set_figwidth(canvas.figure.get_figwidth() * 1.5)
+        else:
+            canvas.figure.set_figheight(canvas.figure.get_figheight() * 0.5)
+            canvas.figure.set_figwidth(canvas.figure.get_figwidth() * 0.5)
+
+        canvas.draw()
+        #canvas.get_tk_widget().place(relx=0.15, rely=0.15)
+'''
+    def changeAlgo(self,algoPath):
+        global csvPathTest
+        if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
+            self.toplevel_window = loadNewAnalytics.loadNewAnalytics(self,algoPath,csvPathTest)  # create window if its None or destroyed
+        else:
+            self.toplevel_window.focus()  # if window exists focus it
+
+    def openUserAlgoEdit(self):
+        from subprocess import call
+        global userAlgoPath
+        currentCall = "notepad "
+        currentCall += userAlgoPath
+        #startfile(userAlgoPath)
+        call(currentCall)
         '''
         
         fileName = 'meetingCFILE.csv'
@@ -243,6 +369,12 @@ class analytics(ctk.CTkToplevel):
         self.mid_frame.update()'''
 
     def update_surface(self, other):
+        '''
+        if(other > sliderLastNumber):
+            self.plotZoom(1)
+        else:
+            self.plotZoom(-1)
+        '''
         '''fig, ax = plt.subplots()
         fig.set_size_inches(11, 5.3)
         ax.scatter(x, y, s * self.slider.get(), c)
