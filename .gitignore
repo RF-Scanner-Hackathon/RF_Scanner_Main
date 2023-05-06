@@ -1,0 +1,10 @@
+*.iq
+*.csv
+.idea
+.idea\*.iml
+.idea\*.xml
+*.cfile
+__pycache__
+*.txt
+*.iml
+*.xml

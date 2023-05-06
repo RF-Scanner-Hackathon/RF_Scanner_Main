@@ -44,10 +44,10 @@ class Browser(ctk.CTkToplevel):
                                                            title="Select a CSV File",
                                                            filetypes=(("all files",
                                                                        "*.*"),
-                                                                    ("CSV files",
-                                                                       "*.csv*"),
-                                                                    ("iq files",
-                                                                       "*.iq*")))
+                                                                      ("iq files",
+                                                                       "*.iq*"),
+                                                                      ("CSV files",
+                                                                       "*.csv*")))
 
                 self.label_file_explorer.configure(text="File Opened: " + self.filename)
                 # time.sleep(2.5)
@@ -68,7 +68,7 @@ class Browser(ctk.CTkToplevel):
 
         self.button_explore = ctk.CTkButton(self.file,
                                             text="Browse Files",
-                                            command=browseFiles)
+                                            command=browseFiles())
         self.button_explore.pack(padx=20, pady=20)
 
         self.button_exit = ctk.CTkButton(self.file,

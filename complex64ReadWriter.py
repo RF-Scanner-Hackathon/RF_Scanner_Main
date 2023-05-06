@@ -12,7 +12,9 @@ import struct
 
 # Converts .iq File to ndarray
 def readIQ(fileName):
-    return np.fromfile(fileName, np.complex64)
+    #return np.fromfile(fileName, np.complex64)
+    return np.fromfile(fileName, dtype=np.uint)
+
 
 
 # Writes ndarray to file
@@ -22,13 +24,23 @@ def writeArray(array, newFileName):
 
 # Reads file into complex64 array
 def readArray(fileName):
-    return np.loadtxt(fileName, dtype='complex64')
+    return np.loadtxt(fileName, dtype='uint')
 
 
 def readArrayAsMatrix(fileName):
     # return np.genfromtxt(fileName, delimiter=',')
     return np.loadtxt(open(fileName, "rb"), delimiter=",", skiprows=1)
 
+#Takes an iq file
+def spliceFreq(fileName):
+    if(fileName.rfind('/')==-1):
+        spliced = fileName.split("_")
+        return spliced[2][:-2]
+    lastDash = fileName.rfind('/')
+    iqFile = fileName[lastDash+1:]
+    #print("iqFile: ", iqFile)
+    spliced = iqFile.split("_")
+    return spliced[2][:-2]
 
 def convertAlgorithm(array):
     index = 1
@@ -47,6 +59,7 @@ def fftAlgorithm(iqArray):
     fft_size = int(np.power(2, 13))
     sampleRate = 1000000
     num_rows = int(sampleLength / fft_size)
+    print("numRows: ", num_rows)
     time = 5  # iq file was recorded for 5 seconds
     spectrogram = np.zeros((num_rows, fft_size));
 
@@ -105,8 +118,8 @@ def iqToCSV(filePath):
             return absolutePath
         except:
             iqArray = readIQ(filePath)
-            if(extention == '.iq'):
-                iqArray = np.nan_to_num(iqArray, nan=0.01)
+            #if(extention == '.iq'):
+                #iqArray = np.nan_to_num(iqArray, nan=0.01)
                 #Ask the user to process a new csv file??
 
             spectrogram = fftAlgorithm(iqArray)
@@ -124,7 +137,7 @@ def iqToCSV(filePath):
 def displayPSD(fileName):
     spectrogram = readArrayAsMatrix(fileName)
 
-    print(spectrogram)
+    #print(spectrogram)
 
     plot.imshow(spectrogram, aspect='auto')
     plot.xlabel("Frequency [MHz]")
@@ -134,6 +147,24 @@ def displayPSD(fileName):
 
 # Ready to hit run and reads txt file from same folder
 def main():
+    '''
+    anyPath = 'AndrewCarvajal7641/2023-04-25-16-36-29_rtlsdr_573037735Hz_1000000Sps.iq'
+    print("input:",anyPath)
+    print("it spit:",spliceFreq(anyPath))
+    print("Datatype:", type(spliceFreq(anyPath)), "Needs ParseInt")
+    '''
+
+
+
+    '''
+    iqArray = readArrayAsMatrix('AndrewCarvajal7641/Alpha.csv')
+    counter = 1
+    for x in iqArray[0]:
+        counter+=1
+        if(x == max(iqArray)):
+            print("Max index:",counter)
+
+    '''
     # iqArray = readIQ('march27Recording.iq')
     # iqArray = readIQ('RTL_1000000.0_K1_02_27_2023_16_00_18.cfile')
     # iqArray = readIQ('RTL_S1_K1.cfile')
@@ -153,6 +184,6 @@ def main():
     # printTests()
     print('\nMain Finished')
 
-# main()
+#main()
 
 

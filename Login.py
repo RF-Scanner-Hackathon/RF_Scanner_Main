@@ -8,10 +8,11 @@ import time
 currentuser = fileMan.user("Andrew", "Carvajal", "7641", ""," ")
 
 
+
 class loginWindow(ctk.CTkToplevel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
+        self.focus()
         self.toplevel_window = None
 
         def button_click(args):
@@ -23,7 +24,9 @@ class loginWindow(ctk.CTkToplevel):
                 print("login")
                 fileMan.printUserArray()
                 # if fileMan.log_in(self.log_firstname.get().strip(), self.log_phone.get().strip()):
+                currentuser = None
                 currentuser = fileMan.log_in(self.log_firstname.get().strip(), self.log_phone.get().strip())
+                print("currentuser:", currentuser.fname)
                 if currentuser != None:
                     self.open_fileBrowser(currentuser)
 
@@ -90,5 +93,6 @@ class loginWindow(ctk.CTkToplevel):
     def open_fileBrowser(self, user):
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
             self.toplevel_window = browser.Browser(user)  # create window if its None or destroyed
+            self.toplevel_window.focus()
         else:
             self.toplevel_window.focus()  # if window exists focus it

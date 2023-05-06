@@ -230,7 +230,7 @@ class analytics(ctk.CTkToplevel):
                                       padx=20, pady=(10, 20))
         # all the buttons in the right sidebar
         self.default_button = ctk.CTkButton(master=self.sidebar_frame,
-                                            fg_color="transparent",
+
                                             text="Default",
                                             border_width=3,
                                             command=lambda: self.changeAlgo(CSVAlgoCopyPath),
@@ -241,7 +241,7 @@ class analytics(ctk.CTkToplevel):
                                  pady=(20, 20), sticky="nsew")
 
         self.edit_button = ctk.CTkButton(master=self.sidebar_frame,
-                                         fg_color="transparent",
+
                                          text="Edit",
                                          border_width=3,
                                          command=self.openUserAlgoEdit,
@@ -251,9 +251,7 @@ class analytics(ctk.CTkToplevel):
                               padx=(5, 5),
                               pady=(20, 20), sticky="nsew")
         self.save_button = ctk.CTkButton(master=self.sidebar_frame,
-                                         fg_color="transparent",
                                          text="Save",
-                                         border_width=3,
                                          command=self.saveTrace,
                                          text_color=("gray10", "#DCE4EE"))
         self.save_button.grid(row=2,
@@ -271,10 +269,8 @@ class analytics(ctk.CTkToplevel):
                               pady=(20, 20), sticky="nsew")
         # this is to exit the screen
         self.exit_button = ctk.CTkButton(master=self,
-                                         fg_color="transparent",
                                          text="Exit",
                                          command=lambda: button_click(3),
-                                         border_width=1,
                                          text_color=("gray10", "#DCE4EE"))
         self.exit_button.grid(row=3,
                               column=4,
@@ -289,10 +285,11 @@ class analytics(ctk.CTkToplevel):
         new_scaling_float = int(new_scaling.replace("%", "")) / 100
         ctk.set_widget_scaling(new_scaling_float)
 
-    def defaultTrace(self,csvPath):
+    def defaultTrace(self, csvPath):
         print("default button")
         global canvas
         spectrogram = complex.readArrayAsMatrix(csvPath)
+
 
         #print(spectrogram)
 
@@ -340,7 +337,8 @@ class analytics(ctk.CTkToplevel):
         #startfile(userAlgoPath)
         call(currentCall)
         '''
-        
+        '''
+
         fileName = 'meetingCFILE.csv'
         spectrogram = np.loadtxt(open(fileName, "rb"), delimiter=",", skiprows=1)
 
@@ -348,7 +346,7 @@ class analytics(ctk.CTkToplevel):
         plot.xlabel("Frequency [MHz]")
         plot.ylabel("Time [s]")
         plot.show()'''
-        # andrew.displayPSD(csvPath)
+        complex.displayPSD(csvPath)
         '''
         fig, ax = plt.imshow()
         fig.set_size_inches(11, 5.3)
