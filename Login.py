@@ -5,7 +5,8 @@ import fileBroweser as browser
 import complex64ReadWriter as complex
 import time
 
-#currentuser = fileMan.user("Andrew", "Carvajal", "7641", "")
+currentuser = fileMan.user("Andrew", "Carvajal", "7641", ""," ")
+
 
 
 class loginWindow(ctk.CTkToplevel):
