@@ -337,7 +337,7 @@ class analytics(ctk.CTkToplevel):
         #startfile(userAlgoPath)
         call(currentCall)
         '''
-        '''
+        
 
         fileName = 'meetingCFILE.csv'
         spectrogram = np.loadtxt(open(fileName, "rb"), delimiter=",", skiprows=1)
@@ -345,8 +345,9 @@ class analytics(ctk.CTkToplevel):
         plot.imshow(spectrogram, aspect='auto')
         plot.xlabel("Frequency [MHz]")
         plot.ylabel("Time [s]")
-        plot.show()'''
-        complex.displayPSD(csvPath)
+        plot.show()
+        '''
+        complex.displayPSD(self.csvPath)
         '''
         fig, ax = plt.imshow()
         fig.set_size_inches(11, 5.3)
