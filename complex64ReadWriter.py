@@ -12,7 +12,9 @@ import struct
 
 # Converts .iq File to ndarray
 def readIQ(fileName):
-    #return np.fromfile(fileName, np.complex64)
+    extentionIndex = fileName.rfind(".")
+    if fileName[extentionIndex:] == '.cfile':
+        return np.fromfile(fileName, dtype=np.complex64)
     return np.fromfile(fileName, dtype=np.uint)
 
 
@@ -77,17 +79,7 @@ def fftAlgorithm(iqArray):
 
 
 def printTests():
-    print('printTests')
-    float32 = np.float32(0)
-    print('bytes of float32 0:', bytes(float32))
 
-    string = b'\\x00\\x00\\x00\\x00'
-    decoded = string.decode()  # Data type is now String
-
-    fromFloat = struct.pack('f', float32)
-    print(fromFloat)
-
-    print('to float32', np.float32(decoded))
 
 def iqToCSV(filePath):
 
