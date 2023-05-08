@@ -85,24 +85,6 @@ class analytics(ctk.CTkToplevel):
         else:
             goDelta = algoImport(CSVAlgoCopyPath)
 
-        global csvPathTest
-        csvPathTest = csvPath
-        # algoPath = pathlib.Path(csvPath).parent.resolve().__str__()
-        algoPath = os.path.dirname(csvPath)
-        global userDirectory
-        userDirectory = algoPath
-        importName = os.path.basename(algoPath)
-        algoPath += "/"
-        algoPath += importName
-        algoPath += "Algo.py"
-        global userAlgoPath
-        userAlgoPath = algoPath
-        if (algoBoolean == "y"):
-
-            # print(algoPath)
-            goDelta = algoImport(algoPath)
-        else:
-            goDelta = algoImport(CSVAlgoCopyPath)
 
         def button_click(args):
             # if args == 1:
@@ -150,7 +132,7 @@ class analytics(ctk.CTkToplevel):
                             columnspan=3, sticky="nsew")
 
         
-
+        '''
         self.left_label = ctk.CTkLabel(master=self.left_frame,
                                        text="Zoom slider:",
                                        anchor="w")
@@ -174,6 +156,7 @@ class analytics(ctk.CTkToplevel):
                          column=0,
                          padx=(20, 10),
                          pady=(10, 5), sticky="nsew")
+        '''
         goDelta.start(csvPath, 100, 50)
 
         self.left_label2 = ctk.CTkLabel(master=self.left_frame, text=("Max transmission:", goDelta.getMaxTranmission()))
@@ -249,7 +232,7 @@ class analytics(ctk.CTkToplevel):
                               sticky="nsew")
         self.left_scrollBox = ScrollingFrameSean(master=self.left_frame, orientation="vertical", width=100, height=10,
                                                  corner_radius=0, label_text='EdgeList')
-        self.left_scrollBox.addTextArray(goDelta.getGlobalEdgeList())
+        self.left_scrollBox.addTextArray(goDelta.returnEdgesList(goDelta.getGlobalEdgeList()))
         self.left_scrollBox.grid(row=10,
                                  column=0,
                                  padx=(20, 10),
