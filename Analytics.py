@@ -200,7 +200,7 @@ class analytics(ctk.CTkToplevel):
 
         self.left_scrollBox = ScrollingFrameSean(master=self.left_frame, orientation="vertical", width=100, height=10,
                                                  corner_radius=0, label_text='EdgeList')
-        self.left_scrollBox.addTextArray(goDelta.getGlobalEdgeList())
+        self.left_scrollBox.addTextArray(goDelta.returnEdgesList(goDelta.getGlobalEdgeList()))
         self.left_scrollBox.grid(row=10,
                                  column=0,
                                  padx=(20, 10),
