@@ -6,6 +6,7 @@ import Analytics as analytics
 import FileManagerDelta as fileMan
 import complex64ReadWriter as complex
 import time
+import iqToCSVSean as iqToCSV
 
 
 class Browser(ctk.CTkToplevel):
@@ -26,8 +27,11 @@ class Browser(ctk.CTkToplevel):
                 sam = fileMan.save_file(currentuser, self.filename)
                 print("sams fileMan: ", sam)
                 fileType = os.path.splitext(sam)
-                if fileType == ".csv":
-                    self.absolutePath = complex.iqToCSV(sam)
+                if fileType != ".csv":
+                    #self.absolutePath = complex.iqToCSV(sam)
+                    #time.sleep(3)
+                    print("Running Conversion")
+                    self.absolutePath = iqToCSV.convertIQtoCSV(sam)
                 else:
                     self.absolutePath = sam
                 self.open_analytics(self.absolutePath,'y')
