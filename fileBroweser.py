@@ -4,7 +4,7 @@ from tkinter import filedialog
 import customtkinter as ctk
 import Analytics as analytics
 import FileManagerDelta as fileMan
-import complex64ReadWriter as complex
+import iqToCSVSean as complex
 import time
 import iqToCSVSean as iqToCSV
 

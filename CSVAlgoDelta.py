@@ -125,7 +125,7 @@ def findAboveAverage(averageRange):
     for y in range(columnLength):
         passBoolean = False
         if isCloseCustom(CSVMatrix[y][middleColumn],currentAverage) or (CSVMatrix[y][middleColumn] > currentAverage):
-            currentAverage = midAverage
+            currentAverage = lowAverage
             fail = 0
             # if it finds a potential row, checks a few y values
             for x in range(rowCheckRange):
@@ -354,7 +354,7 @@ def start(fileName, rows, lengthThreshhold):
     rowsToCheck = rows
     transLengthThreshhold = lengthThreshhold
     CSVMatrix = numpy.genfromtxt(file,delimiter=',', dtype=float,invalid_raise=False)
-    CSVMatrix = numpy.delete(CSVMatrix,4096,1)
+    #CSVMatrix = numpy.delete(CSVMatrix,4096,1)
 ##!! CSVMatrix IS A 2D MATRIX :) yay!
     print(CSVMatrix) ##Print the full matrix
 ##AboverAverageRowNumber is list

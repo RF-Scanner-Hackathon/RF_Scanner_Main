@@ -8,11 +8,16 @@ Created on Fri Mar 31 14:56:50 2023
 import numpy as np
 import matplotlib.pyplot as plot
 import struct
+import pandas as pd
+
+from scipy import signal
 
 
 # Converts .iq File to ndarray
 def readIQ(fileName):
-    #return np.fromfile(fileName, np.complex64)
+    extentionIndex = fileName.rfind(".")
+    if fileName[extentionIndex:] == '.cfile':
+        return np.fromfile(fileName, dtype=np.complex64)
     return np.fromfile(fileName, dtype=np.uint)
 
 
@@ -26,7 +31,7 @@ def writeArray(array, newFileName):
 def readArray(fileName):
     return np.loadtxt(fileName, dtype='uint')
 
-
+#Reads csv
 def readArrayAsMatrix(fileName):
     # return np.genfromtxt(fileName, delimiter=',')
     return np.loadtxt(open(fileName, "rb"), delimiter=",", skiprows=1)
@@ -45,11 +50,37 @@ def spliceFreq(fileName):
 def convertAlgorithm(array):
     index = 1
     firstRow = array[0:512]
-    for elem in firstRow:
+    for elem in array:
+        if index < 10:
+            I = np.real(elem)  # inphase
+            Q = np.imag(elem)  # quadrature
+            print(index, ':', I, "+", Q)
+            index += 1
+    I = np.real(array[0]) #inphase
+    Q = np.imag(array[0]) #quadrature
+    index = 0
+    print("\n\n"+str(index), ':', I,"+", Q)
+    power = np.power(I,2) + np.power(Q,2)
+    print("pow:",np.power(I,2))
+    print("power:",power)
+    magnitude = np.sqrt(power)
+    print("magnitude:",magnitude)
+    phase = np.arctan(Q/I)
+    print("Angle:", phase)
+    multipliedByBaseband = 5.73e8 * array[0]
+    print("Modulated Signal:",multipliedByBaseband)
+
+
+
+
+    '''
+        for elem in firstRow:
         real = np.real(elem)
         imag = np.imag(elem)
         print(index, ':', bytes(real), bytes(imag))
         index = index + 1
+    '''
+
 
 
 def fftAlgorithm(iqArray):
@@ -75,19 +106,59 @@ def fftAlgorithm(iqArray):
     # print('mean:', mean)
     return spectrogram
 
+def printTests2():
+    fileName = "AndrewCarvajal7641/2023-04-25-16-36-29_rtlsdr_573037735Hz_1000000Sps.iq"
+    iqArray = readIQ(fileName)
+    spectrogram = fftAlgorithm(iqArray)
+    print(spectrogram)
+    csvFile = fileName[:len(fileName)-2]+"csv"
+    print("changed csvName:",fileName[:len(fileName)-2]+"csv")
+    matrix = readArrayAsMatrix(csvFile)
+    print("matrix:",matrix)
+    scaleCSV(csvFile)
 
 def printTests():
-    print('printTests')
-    float32 = np.float32(0)
-    print('bytes of float32 0:', bytes(float32))
+    fileName = 'AndrewCarvajal7641/RTL_1000000.0_K1_02_27_2023_16_00_18.cfile'
+    iqArray = readIQ(fileName)
+    counter = 1
+    convertAlgorithm(iqArray)
+    '''
+        for x in iqArray:
+        if counter < 512:
+            print(str(counter) + ":", x)
+            counter+=1
+    '''
 
-    string = b'\\x00\\x00\\x00\\x00'
-    decoded = string.decode()  # Data type is now String
+def pandaslmfao():
+    iqData = np.fromfile('AndrewCarvajal7641/2023-04-25-16-36-29_rtlsdr_573037735Hz_1000000Sps.iq', dtype='uint')
 
-    fromFloat = struct.pack('f', float32)
-    print(fromFloat)
+    iqData = iqData.astype(np.complex64)
+    iqData -= 127.5 + 127.5j
+    iqData /= 127.5
 
-    print('to float32', np.float32(decoded))
+
+    real = iqData.real
+    imag = iqData.imag
+
+    df = pd.DataFrame({'real':real, 'imag':imag})
+
+    df.to_csv('iqSamples.csv', index=False)
+    print(readArrayAsMatrix('iqSamples.csv'))
+    displayPSD('iqSamples.csv')
+
+def scaleCSV(fileName):
+    df = pd.read_csv(fileName)
+
+    iq_data = df['I'] + 1j * df['Q']
+    iq_data /=127.5
+    iq_data -= (1 + 1j)
+
+    real = iq_data.real
+    imag = iq_data.imag
+
+    df_out = pd.DataFrame({'real':real,'imag':imag})
+    df_out.to_csv(fileName, index=False)
+    displayPSD(fileName)
 
 def iqToCSV(filePath):
 
@@ -147,6 +218,9 @@ def displayPSD(fileName):
 
 # Ready to hit run and reads txt file from same folder
 def main():
+    #printTests()
+    #printTests2()
+    #pandaslmfao()
     '''
     anyPath = 'AndrewCarvajal7641/2023-04-25-16-36-29_rtlsdr_573037735Hz_1000000Sps.iq'
     print("input:",anyPath)
@@ -184,6 +258,6 @@ def main():
     # printTests()
     print('\nMain Finished')
 
-#main()
+
 
 
