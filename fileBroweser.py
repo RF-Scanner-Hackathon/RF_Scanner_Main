@@ -1,10 +1,12 @@
 # import filedialog module
+import os
 from tkinter import filedialog
 import customtkinter as ctk
 import Analytics as analytics
 import FileManagerDelta as fileMan
-import complex64ReadWriter as complex
+import iqToCSVSean as complex
 import time
+import iqToCSVSean as iqToCSV
 
 
 class Browser(ctk.CTkToplevel):
@@ -24,8 +26,15 @@ class Browser(ctk.CTkToplevel):
 
                 sam = fileMan.save_file(currentuser, self.filename)
                 print("sams fileMan: ", sam)
-                self.absolutePath = complex.iqToCSV(sam)
-                self.open_analytics(self.absolutePath)
+                fileType = os.path.splitext(sam)
+                if fileType != ".csv":
+                    #self.absolutePath = complex.iqToCSV(sam)
+                    #time.sleep(3)
+                    print("Running Conversion")
+                    self.absolutePath = iqToCSV.convertIQtoCSV(sam)
+                else:
+                    self.absolutePath = sam
+                self.open_analytics(self.absolutePath,'y')
                 self.destroy()
 
         self.geometry("700x400")
@@ -35,14 +44,14 @@ class Browser(ctk.CTkToplevel):
         # file explorer window
         def browseFiles():
             if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
-                self.filename = filedialog.askopenfilename(initialdir="/",
+                self.filename = filedialog.askopenfilename(initialdir=currentuser.getPath,
                                                            title="Select a CSV File",
                                                            filetypes=(("all files",
                                                                        "*.*"),
-                                                                    ("CSV files",
-                                                                       "*.csv*"),
-                                                                    ("iq files",
-                                                                       "*.iq*")))
+                                                                      ("iq files",
+                                                                       "*.iq*"),
+                                                                      ("CSV files",
+                                                                       "*.csv*")))
 
                 self.label_file_explorer.configure(text="File Opened: " + self.filename)
                 # time.sleep(2.5)
@@ -63,7 +72,7 @@ class Browser(ctk.CTkToplevel):
 
         self.button_explore = ctk.CTkButton(self.file,
                                             text="Browse Files",
-                                            command=browseFiles)
+                                            command=browseFiles())
         self.button_explore.pack(padx=20, pady=20)
 
         self.button_exit = ctk.CTkButton(self.file,
@@ -73,9 +82,9 @@ class Browser(ctk.CTkToplevel):
 
     # Let the window wait for any events
 
-    def open_analytics(self, csvPath):
+    def open_analytics(self, csvPath, s):
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
-            self.toplevel_window = analytics.analytics(csvPath)  # create window if its None or destroyed
+            self.toplevel_window = analytics.analytics(csvPath, s)  # create window if its None or destroyed
         else:
             self.toplevel_window.focus()  # if window exists focus it
 

@@ -11,7 +11,7 @@ class App(ctk.CTk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         fileMan.__init__(self)
-        print(fileMan.loadUserArray())
+        #print(fileMan.loadUserArray())
         self.geometry("800x600")
         self.title("RF Scavenger Hunt")
 
