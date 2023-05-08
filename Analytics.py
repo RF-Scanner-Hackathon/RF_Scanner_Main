@@ -15,7 +15,7 @@ import importlib.util
 CSVAlgoCopyPath = os.path.abspath('CSVAlgoDelta.py')
 CSVAlgoDefaultName = "CSVAlgoDelta"
 
-csvPathTest = "test3.csv"
+#csvPathTest = "test3.csv"
 canvas = FigureCanvasTkAgg
 userDirectory = " "
 userAlgoPath = " "
