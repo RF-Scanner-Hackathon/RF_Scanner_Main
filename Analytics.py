@@ -347,7 +347,7 @@ class analytics(ctk.CTkToplevel):
         plot.ylabel("Time [s]")
         plot.show()
         '''
-        complex.displayPSD(self.csvPath)
+        #complex.displayPSD(csvpath)
         '''
         fig, ax = plt.imshow()
         fig.set_size_inches(11, 5.3)

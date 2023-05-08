@@ -4,7 +4,7 @@ from tkinter import filedialog
 import customtkinter as ctk
 import Analytics as analytics
 import FileManagerDelta as fileMan
-import complex64ReadWriter as complex
+import iqToCSVSean as complex
 import time
 
 
@@ -26,8 +26,8 @@ class Browser(ctk.CTkToplevel):
                 sam = fileMan.save_file(currentuser, self.filename)
                 print("sams fileMan: ", sam)
                 fileType = os.path.splitext(sam)
-                if fileType == ".csv":
-                    self.absolutePath = complex.iqToCSV(sam)
+                if fileType != ".csv":
+                    self.absolutePath = complex.convertIQtoCSV(sam)
                 else:
                     self.absolutePath = sam
                 self.open_analytics(self.absolutePath,'y')
