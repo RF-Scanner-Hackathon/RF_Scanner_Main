@@ -6,8 +6,12 @@ import matplotlib.pyplot as plot
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 import complex64ReadWriter as complex
+import Login as login
 import loadNewAnalytics
+import os
+import importlib.util
 
+# csvpath = "test3.csv"
 CSVAlgoCopyPath = os.path.abspath('CSVAlgoDelta.py')
 CSVAlgoDefaultName = "CSVAlgoDelta"
 
@@ -81,6 +85,25 @@ class analytics(ctk.CTkToplevel):
         else:
             goDelta = algoImport(CSVAlgoCopyPath)
 
+        global csvPathTest
+        csvPathTest = csvPath
+        # algoPath = pathlib.Path(csvPath).parent.resolve().__str__()
+        algoPath = os.path.dirname(csvPath)
+        global userDirectory
+        userDirectory = algoPath
+        importName = os.path.basename(algoPath)
+        algoPath += "/"
+        algoPath += importName
+        algoPath += "Algo.py"
+        global userAlgoPath
+        userAlgoPath = algoPath
+        if (algoBoolean == "y"):
+
+            # print(algoPath)
+            goDelta = algoImport(algoPath)
+        else:
+            goDelta = algoImport(CSVAlgoCopyPath)
+
         def button_click(args):
             # if args == 1:
             #    self.defaultTrace()
@@ -126,8 +149,7 @@ class analytics(ctk.CTkToplevel):
                             rowspan=3,
                             columnspan=3, sticky="nsew")
 
-        # self.right_frame = customtkinter.CTkFrame(self)
-        # self.right_frame.grid(row=0, column=2, padx=(200, 200), pady=(20, 0), sticky="nsew")
+        
 
         self.left_label = ctk.CTkLabel(master=self.left_frame,
                                        text="Zoom slider:",
@@ -209,6 +231,32 @@ class analytics(ctk.CTkToplevel):
                                  sticky="new")
         # self.left_scrollBox.grid_propagate(0)
 
+        self.left_label6 = ctk.CTkLabel(master=self.left_frame,
+                                        text=("BroadCast Length / Longest Recorded Burst (Seconds):",
+                                              goDelta.getSecondsFromRows(goDelta.getTranLengthBroadcast())))
+        self.left_label6.grid(row=8,
+                              column=0,
+                              padx=(20, 10),
+                              pady=(10, 10),
+                              sticky="nsew")
+
+        self.left_label7 = ctk.CTkLabel(master=self.left_frame, text=(
+            "Tranmission/Noise Difference %:", goDelta.getTranmissionNoiseDifference()))
+        self.left_label7.grid(row=9,
+                              column=0,
+                              padx=(20, 10),
+                              pady=(10, 10),
+                              sticky="nsew")
+        self.left_scrollBox = ScrollingFrameSean(master=self.left_frame, orientation="vertical", width=100, height=10,
+                                                 corner_radius=0, label_text='EdgeList')
+        self.left_scrollBox.addTextArray(goDelta.getGlobalEdgeList())
+        self.left_scrollBox.grid(row=10,
+                                 column=0,
+                                 padx=(20, 10),
+                                 pady=(10, 10),
+                                 rowspan=1,
+                                 sticky="new")
+
         self.logo_label = ctk.CTkLabel(self.sidebar_frame,
                                        text="Analytics",
                                        font=ctk.CTkFont(size=20,
@@ -238,9 +286,7 @@ class analytics(ctk.CTkToplevel):
                                       padx=20, pady=(10, 20))
         # all the buttons in the right sidebar
         self.default_button = ctk.CTkButton(master=self.sidebar_frame,
-                                            fg_color="transparent",
                                             text="Default",
-                                            border_width=3,
                                             command=lambda: self.changeAlgo(CSVAlgoCopyPath),
                                             text_color=("gray10", "#DCE4EE"))
         self.default_button.grid(row=0,
@@ -249,9 +295,7 @@ class analytics(ctk.CTkToplevel):
                                  pady=(20, 20), sticky="nsew")
 
         self.edit_button = ctk.CTkButton(master=self.sidebar_frame,
-                                         fg_color="transparent",
                                          text="Edit",
-                                         border_width=3,
                                          command=self.openUserAlgoEdit,
                                          text_color=("gray10", "#DCE4EE"))
         self.edit_button.grid(row=1,
@@ -259,9 +303,7 @@ class analytics(ctk.CTkToplevel):
                               padx=(5, 5),
                               pady=(20, 20), sticky="nsew")
         self.save_button = ctk.CTkButton(master=self.sidebar_frame,
-                                         fg_color="transparent",
                                          text="Save",
-                                         border_width=3,
                                          command=self.saveTrace,
                                          text_color=("gray10", "#DCE4EE"))
         self.save_button.grid(row=2,
@@ -279,10 +321,8 @@ class analytics(ctk.CTkToplevel):
                               pady=(20, 20), sticky="nsew")
         # this is to exit the screen
         self.exit_button = ctk.CTkButton(master=self,
-                                         fg_color="transparent",
                                          text="Exit",
-                                         command=lambda: button_click(3),
-                                         border_width=1,
+                                         command=self.changeAlgo(userAlgoPath),
                                          text_color=("gray10", "#DCE4EE"))
         self.exit_button.grid(row=3,
                               column=4,
@@ -316,22 +356,6 @@ class analytics(ctk.CTkToplevel):
         canvas.draw()
         canvas.get_tk_widget().place(relx=0.15, rely=0.15)
         # plot.show()
-
-    def plotZoom(self, number):
-        # Does not work and crashes the program if the zoom slider is moved to rapidly, need to find a better way to do this
-        '''
-        global canvas
-        if(number >= 1):
-            canvas.ax
-            canvas.set_figheight(canvas.figure.get_figheight() * 1.5)
-            canvas.figure.set_figwidth(canvas.figure.get_figwidth() * 1.5)
-        else:
-            canvas.figure.set_figheight(canvas.figure.get_figheight() * 0.5)
-            canvas.figure.set_figwidth(canvas.figure.get_figwidth() * 0.5)
-
-        canvas.draw()
-        #canvas.get_tk_widget().place(relx=0.15, rely=0.15)
-'''
 
     def changeAlgo(self, algoPath):
         global csvPathTest
