@@ -30,10 +30,11 @@ def create_folder(fname, lname, last4DigitsOfPhone):
         return
     os.makedirs(folder_path)
 
+    #Dis for github
     gitignore = open(".gitignore", "a")
-    gitignore.write("\n"+folder_name)
+    gitignore.write("\n"+folder_name) #To avoid pushing personal folders to git
 
-    # Create file name with folder name
+# Create file name with folder name
     algoName = "Algo.py"
     userAlgoName = (f_name + algoName)
 
