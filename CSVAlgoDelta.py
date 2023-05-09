@@ -7,12 +7,15 @@ import numpy
 import math
 import re
 
-# file = sys.argv[1] + ".csv" #CSV File
-# rowsToCheck = int(sys.argv[2]) #Amount of Rows that will be computed for the average
-# transLengthThreshhold = int(sys.argv[3]) #in the return of function createEdges(), Will show edges higher or equal to this number (EX"  if number is "5", (2-4 Distance (2) NOT SHOWN (4-10 DIstance 6)) SHOWN)
-# file = "" #CSV File
-# rowsToCheck = 0#Amount of Rows that will be computed for the average
-# transLengthThreshhold = 0 #in the return of function createEdges(), Will show edges higher or equal to this number (EX"  if number is "5", (2-4 Distance (2) NOT SHOWN (4-10 DIstance 6)) SHOWN)
+
+
+#file = sys.argv[1] + ".csv" #CSV File
+#rowsToCheck = int(sys.argv[2]) #Amount of Rows that will be computed for the average
+#transLengthThreshhold = int(sys.argv[3]) #in the return of function createEdges(), Will show edges higher or equal to this number (EX"  if number is "5", (2-4 Distance (2) NOT SHOWN (4-10 DIstance 6)) SHOWN)
+#file = "" #CSV File
+#rowsToCheck = 0#Amount of Rows that will be computed for the average
+#transLengthThreshhold = 0 #in the return of function createEdges(), Will show edges higher or equal to this number (EX"  if number is "5", (2-4 Distance (2) NOT SHOWN (4-10 DIstance 6)) SHOWN)
+
 noiseFloor = 0
 maxTranmission = 0
 CSVMatrix = []
@@ -22,7 +25,6 @@ tranLengthGreatestDist = 0
 traceTimeCalcVar = 62.4
 globalEdgeList = []
 sampleRate = 0
-
 
 ##Function that will return the number of the row it belives to be above average
 ##Average range will take in how many rows to calulate for the average
@@ -261,8 +263,7 @@ def isCloseCustom(a, b, rel_tol=1e-09, abs_tol=0.0):
 
 ## Needs a major overhaul depending on sampling rate. DO TESTS!!!
 def getTraceTime():
-    return numpy.round(CSVMatrix.shape[1] / sampleRate, 4) * 10000
-
+    return numpy.round(CSVMatrix.shape[1]/sampleRate,4) * 10000
 
 def getMaxTranmission():
     return numpy.round(maxTranmission)
@@ -290,7 +291,8 @@ def getGlobalEdgeList():
 
 def getSecondsFromRows(rowDistance):
     global sampleRate
-    return numpy.round((rowDistance / sampleRate) * 1000, 4)
+    return numpy.round((rowDistance /sampleRate) * 1000,4)
+
 
 
 def createEdges(numberList, transLengthThreshhold):
@@ -316,17 +318,13 @@ def createEdges(numberList, transLengthThreshhold):
                     returnEdgeList.append(lastEdge)
 
             returnEdgeList.append(edgeTemp)
-            if (edgeTemp.distance >= 10):
+            if(edgeTemp.distance >=10):
                 tranAverage.append(edgeTemp.distance)
             if edgeTemp.distance > tranLengthGreatestDist:
                 tranLengthGreatestDist = edgeTemp.distance
-
             distance = 0
             lastNumber = i
             edgeBoolean = False
-
-
-
         else:
             lastNumber = i
     print(tranAverage)
@@ -349,6 +347,13 @@ def printEdges(edgeList):
     print("transmission Length Average")
     print(getTranLengthAverage())
 
+def returnEdgesList(edgeList):
+    returnList = []
+    print("Printing List")
+    for index in edgeList:
+        if(index.distance >= transLengthThreshhold):
+            returnList.append(index)
+    return returnList
 
 def returnEdgesList(edgeList):
     returnList = []
@@ -373,11 +378,13 @@ def start(fileName, rows, lengthThreshhold):
     file = fileName
     rowsToCheck = rows
     transLengthThreshhold = lengthThreshhold
-    CSVMatrix = numpy.genfromtxt(file, delimiter=',', dtype=float, invalid_raise=False)
-    # CSVMatrix = numpy.delete(CSVMatrix,4096,1)
+
+    CSVMatrix = numpy.genfromtxt(file,delimiter=',', dtype=float,invalid_raise=False)
+    
     ##!! CSVMatrix IS A 2D MATRIX :) yay!
-    print(CSVMatrix)  ##Print the full matrix
+    print(CSVMatrix) ##Print the full matrix
     ##AboverAverageRowNumber is list
+
     match = re.search(r"_(\d+)Sps\.csv", file)
     if match:
         sampleRate = int(match.group(1))
