@@ -42,7 +42,13 @@ def create_folder(fname, lname, last4DigitsOfPhone):
         file.write(fname + '\n' + lname + '\n' + last4DigitsOfPhone + '\n' + folder_path + '\n' + userAlgoPath)
 
     # Write the folder path to a file
-    with open("users.txt", "a") as f:
+    with open("users.txt", "r+") as f:
+        content = f.read()
+        if content.startswith("\n"):
+            content = content[1:0]
+            f.seek(0)
+            f.write(content)
+            f.truncate()
         f.write(f"{folder_path}\n")
     # with open("CSVAlgoDelta","r") as AlgoCopy:
 
@@ -60,7 +66,7 @@ class user:
         self.fname = fname
         self.lname = lname
         self.pnumber = pnumber
-        self.fpath = fpath
+        self.fpath = fpath.strip()
         self.algoPath = algoPath
 
     def __str__(self):
@@ -100,8 +106,7 @@ class user:
 
 def loadUser(infoTextFilePath):
     tempFile = open(infoTextFilePath, "r")
-    tempUser = user(tempFile.readline(), tempFile.readline(), tempFile.readline(), tempFile.readline(),
-                    tempFile.readline())
+    tempUser = user(tempFile.readline(), tempFile.readline(), tempFile.readline(), tempFile.readline(),tempFile.readline())
     return tempUser
 
 
@@ -118,14 +123,15 @@ def getInfoText(folderPath):
 
 
 def save_file(user, file_path):
-    # if(not os.path.exists(file_path)):
-    try:
-        new_file_path = shutil.move(file_path, user.fpath)
-        return new_file_path
-    except:
-        print("File Already Exsists")
-        return file_path
+    filename = os.path.basename(file_path)
+    dest_path = os.path.join(user.fpath,filename)
 
+    if os.path.abspath(file_path) == os.path.abspath(dest_path):
+        return file_path
+    print(file_path)
+    print(user.fpath)
+    shutil.move(file_path,user.fpath)
+    return dest_path
 
 # def  load_file(user, )
 
@@ -152,7 +158,8 @@ def loadUserArray():
             returnArray.append(line)
     for element in returnArray:
         # print(element)
-        userArray.append(loadUser(getInfoText(element)))
+        tempUser = loadUser(getInfoText(element))
+        userArray.append(tempUser)
 
         # print(element)
         # print(getInfoText(str(element)))
