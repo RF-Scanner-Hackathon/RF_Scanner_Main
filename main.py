@@ -83,17 +83,27 @@ class App(ctk.CTk):
         new_scaling_float = int(new_scaling.replace("%", "")) / 100
         ctk.set_widget_scaling(new_scaling_float)
 
+
     def open_register(self):
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
             self.toplevel_window = registerWindow.registerWindow()  # create window if its None or destroyed
+            self.toplevel_window.after(0, lambda: self.toplevel_window.lift())
         else:
-            self.toplevel_window.focus()  # if window exists focus it
+            self.toplevel_window.deiconify()  # if window exists deiconify it
+            self.toplevel_window.after(0,lambda:self.toplevel_window.lift())  # lift window to the top level
+            #self.toplevel_window.focus.set()
+
 
     def open_login(self):
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
             self.toplevel_window = loginWindow.loginWindow()  # create window if its None or destroyed
+            #self.toplevel_window.lift()
+            self.toplevel_window.after(0, lambda: self.toplevel_window.lift())
         else:
-            self.toplevel_window.focus()  # if window exists focus it
+            self.toplevel_window.deiconify()  # if window exists deiconify it
+            self.toplevel_window.after(0, lambda: self.toplevel_window.lift())
+            #self.toplevel_window.lift()  # lift window to the top level
+            #self.toplevel_window.focus.set()
 
 
 if __name__ == "__main__":

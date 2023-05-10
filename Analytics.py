@@ -131,32 +131,10 @@ class analytics(ctk.CTkToplevel):
                             rowspan=3,
                             columnspan=3, sticky="nsew")
 
-        
-        '''
-        self.left_label = ctk.CTkLabel(master=self.left_frame,
-                                       text="Zoom slider:",
-                                       anchor="w")
-        self.left_label.grid(row=2,
-                             column=0,
-                             padx=(20, 10),
-                             pady=(5, 2),
-                             sticky="nsew")
+        # self.right_frame = customtkinter.CTkFrame(self)
+        # self.right_frame.grid(row=0, column=2, padx=(200, 200), pady=(20, 0), sticky="nsew")
 
-        #    self.right_label = customtkinter.CTkLabel(self.right_frame, text="right label:", anchor="w")
-        #  self.right_label.grid(row=2, column=0, padx=(20, 10), pady=(10, 10), sticky="ew")
 
-        self.slider = ctk.CTkSlider(master=self.left_frame,
-                                    width=300,
-                                    height=20,
-                                    from_=0,
-                                    to=4,
-                                    number_of_steps=4,
-                                    command=self.update_surface)
-        self.slider.grid(row=3,
-                         column=0,
-                         padx=(20, 10),
-                         pady=(10, 5), sticky="nsew")
-        '''
         goDelta.start(csvPath, 100, 50)
 
         self.left_label2 = ctk.CTkLabel(master=self.left_frame, text=("Max transmission:", goDelta.getMaxTranmission()))
@@ -196,7 +174,7 @@ class analytics(ctk.CTkToplevel):
                               sticky="nsew")
 
         self.left_label7 = ctk.CTkLabel(master=self.left_frame, text=(
-        "Tranmission/Noise Difference %:", goDelta.getTranmissionNoiseDifference()))
+            "Tranmission/Noise Difference %:", goDelta.getTranmissionNoiseDifference()))
         self.left_label7.grid(row=9,
                               column=0,
                               padx=(20, 10),
@@ -205,7 +183,7 @@ class analytics(ctk.CTkToplevel):
 
         self.left_scrollBox = ScrollingFrameSean(master=self.left_frame, orientation="vertical", width=100, height=10,
                                                  corner_radius=0, label_text='EdgeList')
-        self.left_scrollBox.addTextArray(goDelta.getGlobalEdgeList())
+        self.left_scrollBox.addTextArray(goDelta.returnEdgesList(goDelta.getGlobalEdgeList()))
         self.left_scrollBox.grid(row=10,
                                  column=0,
                                  padx=(20, 10),
@@ -305,7 +283,7 @@ class analytics(ctk.CTkToplevel):
         # this is to exit the screen
         self.exit_button = ctk.CTkButton(master=self,
                                          text="Exit",
-                                         command=self.changeAlgo(userAlgoPath),
+                                         command=lambda: button_click(3),
                                          text_color=("gray10", "#DCE4EE"))
         self.exit_button.grid(row=3,
                               column=4,
@@ -345,8 +323,10 @@ class analytics(ctk.CTkToplevel):
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
             self.toplevel_window = loadNewAnalytics.loadNewAnalytics(self, algoPath,
                                                                      csvPathTest)  # create window if its None or destroyed
+            self.toplevel_window.after(0, lambda: self.toplevel_window.lift())
         else:
             self.toplevel_window.focus()  # if window exists focus it
+            self.toplevel_window.after(0, lambda: self.toplevel_window.lift())
 
     def openUserAlgoEdit(self):
         from subprocess import call
