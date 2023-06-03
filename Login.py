@@ -5,7 +5,8 @@ import fileBroweser as browser
 import complex64ReadWriter as complex
 import time
 
-#currentuser = fileMan.user("Andrew", "Carvajal", "7641", "")
+currentuser = fileMan.user("Andrew", "Carvajal", "7641", ""," ")
+
 
 
 class loginWindow(ctk.CTkToplevel):
@@ -92,6 +93,8 @@ class loginWindow(ctk.CTkToplevel):
     def open_fileBrowser(self, user):
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
             self.toplevel_window = browser.Browser(user)  # create window if its None or destroyed
-            self.toplevel_window.focus()
+            self.toplevel_window.after(0, lambda: self.toplevel_window.lift())
+            #self.toplevel_window.focus()
         else:
             self.toplevel_window.focus()  # if window exists focus it
+            self.toplevel_window.after(0, lambda: self.toplevel_window.lift())

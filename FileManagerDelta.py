@@ -1,20 +1,28 @@
 import os
 import shutil
 import time
+
 userArray = []
+CSVAlgoCopyPath = os.path.abspath('CSVAlgoDelta.py')
 
 
 def __init__(self):
     try:
         open("users.txt", "x")
     except:
-        loadUserArray()
-    #if (not open("users.txt", "x")):
+        try:
+            loadUserArray()
+        except:
+            pass
+        pass
+    # if (not open("users.txt", "x")):
     #    loadUserArray()
 
 
 def create_folder(fname, lname, last4DigitsOfPhone):
     # Create a folder with the user's name
+    global CSVAlgoCopyPath
+    firstName = fname
     f_name = (fname + lname + last4DigitsOfPhone)
     folder_name = f"{f_name}"
     folder_path = os.path.join(os.getcwd(), folder_name)
@@ -22,31 +30,48 @@ def create_folder(fname, lname, last4DigitsOfPhone):
         return
     os.makedirs(folder_path)
 
-    # Create file name with folder name
+    #Dis for github
+    gitignore = open(".gitignore", "a")
+    gitignore.write("\n"+folder_name) #To avoid pushing personal folders to git
+
+# Create file name with folder name
+    algoName = "Algo.py"
+    userAlgoName = (f_name + algoName)
+
+    userAlgoPath = shutil.move(shutil.copy(CSVAlgoCopyPath, userAlgoName), folder_path)
     infoFile_name = "info.txt"
 
     # Get user input for file contents & Create and write to file
     with open(os.path.join(folder_name, infoFile_name), "w") as file:
-        file.write(fname + '\n' + lname + '\n' + last4DigitsOfPhone + '\n' + folder_path)
+        file.write(fname + '\n' + lname + '\n' + last4DigitsOfPhone + '\n' + folder_path + '\n' + userAlgoPath)
 
     # Write the folder path to a file
-    with open("users.txt", "a") as f:
+    with open("users.txt", "r+") as f:
+        content = f.read()
+        if content.startswith("\n"):
+            content = content[1:0]
+            f.seek(0)
+            f.write(content)
+            f.truncate()
         f.write(f"{folder_path}\n")
+    # with open("CSVAlgoDelta","r") as AlgoCopy:
+
     folder_path += infoFile_name
-    #while(not os.path.exists(folder_path)):
-     #   pass
+    # while(not os.path.exists(folder_path)):
+    #   pass
     time.sleep(2.5)
-    #loadUser(folder_path)
+    # loadUser(folder_path)
 
     return folder_path
 
 
 class user:
-    def __init__(self, fname, lname, pnumber, fpath):
+    def __init__(self, fname, lname, pnumber, fpath, algoPath):
         self.fname = fname
         self.lname = lname
         self.pnumber = pnumber
-        self.fpath = fpath
+        self.fpath = fpath.strip()
+        self.algoPath = algoPath
 
     def __str__(self):
         returnString = self.fname
@@ -56,6 +81,8 @@ class user:
         returnString += self.pnumber
         returnString += '-'
         returnString += self.fpath
+        returnString += '-'
+        returnString += self.algoPath
         return returnString
 
     def getPath(self):
@@ -66,6 +93,9 @@ class user:
 
     def getPNumber(self):
         return self.pnumber
+
+    def getAlgoPath(self):
+        return self.algoPath
 
     def equals(self, other):
         if self.fname == other.fname and self.pnumber == other.pnumber:
@@ -80,7 +110,7 @@ class user:
 
 def loadUser(infoTextFilePath):
     tempFile = open(infoTextFilePath, "r")
-    tempUser = user(tempFile.readline(), tempFile.readline(), tempFile.readline(), tempFile.readline())
+    tempUser = user(tempFile.readline(), tempFile.readline(), tempFile.readline(), tempFile.readline(),tempFile.readline())
     return tempUser
 
 
@@ -97,19 +127,23 @@ def getInfoText(folderPath):
 
 
 def save_file(user, file_path):
-    if(not os.path.exists(file_path)):
-        new_file_path = shutil.move(file_path, user.fpath)
-        return new_file_path
+    filename = os.path.basename(file_path)
+    dest_path = os.path.join(user.fpath,filename)
 
-    return file_path
-
+    if os.path.abspath(file_path) == os.path.abspath(dest_path):
+        return file_path
+    print(file_path)
+    print(user.fpath)
+    shutil.move(file_path,user.fpath)
+    return dest_path
 
 # def  load_file(user, )
 
 # The following method will search for the user.
 def log_in(fname, lastFourDigitOfPhoneNo):
     for element in userArray:
-        if element.fname.strip().lower().__eq__(fname.strip().lower()) and element.pnumber.strip().__eq__(lastFourDigitOfPhoneNo.strip()):
+        if element.fname.strip().__eq__(fname.strip()) and element.pnumber.strip().__eq__(
+                lastFourDigitOfPhoneNo.strip()):
             # if element.logInComp(fname, lastFourDigitOfPhoneNo):
             print("user found")
             return element
@@ -128,15 +162,18 @@ def loadUserArray():
             returnArray.append(line)
     for element in returnArray:
         # print(element)
-        userArray.append(loadUser(getInfoText(element)))
+        tempUser = loadUser(getInfoText(element))
+        userArray.append(tempUser)
 
         # print(element)
         # print(getInfoText(str(element)))
 
     return returnArray
 
+
 def printUserArray():
     print(userArray)
+
 
 def main():
     # f_name = input("Enter the first name : ")
@@ -150,7 +187,6 @@ def main():
     # print(userArray)
 
     # print(userArray[0])
-    #save_file(log_in("Sam", "9999"), r"C:\Users\Samarpita Podder\Desktop\file.txt")
+    # save_file(log_in("Sam", "9999"), r"C:\Users\Samarpita Podder\Desktop\file.txt")
 
-
-#main()
+# main()
